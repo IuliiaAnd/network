@@ -1,0 +1,63 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+    {% block script %}
+    <script src="{% static 'network/main.js' %}"></script>
+    {% endblock %}
+    <div class="posts-flex">
+        <div class="recent-posts">
+            {% for post in page_obj %}
+                <div class="single-post" id="post-{{ post.id }}">
+                    <p class="post-content" id="content-{{ post.id }}">{{ post.post }}</p>
+                    <textarea id="edit-content-{{ post.id }}" class="edit-content" style="display:none;"></textarea>
+                    <p class="error-message" id="error-{{ post.id }}" style="color: red; display: none;"></p>
+                    <p>
+                        <a href="{% url 'profile' post.author.id %}">
+                        <strong>{{ post.author.username }}</strong>
+                        </a>,
+                        {{ post.date|date:"F j, Y, g:i a" }}
+                    </p>
+                    {% if not post.is_edited %}
+                        <p class="edited" id="edited-{{ post.id }}" style="display: none;">
+                            (edited)
+                        </p>
+                    {% else %} 
+                        <p class="edited" id="edited-{{ post.id }}" style="display: block;">
+                            (edited)
+                        </p>
+                    {% endif %}
+
+                    <p>
+                        <button class="like-btn" data-post-id="{{ post.id }}" data-user-id="{{ user.id }}">
+                            {% if post.id in user_liked_posts %}
+                                <i class="liked-{{ post.id }} bi bi-hand-thumbs-up-fill" style="display: block;"></i>
+                                <i class="unliked-{{ post.id }} bi bi-hand-thumbs-up" style="display: none;"></i>
+                            {% else %}
+                                <i class="unliked-{{ post.id }} bi bi-hand-thumbs-up" style="display: block;"></i>
+                                <i class="liked-{{ post.id }} bi bi-hand-thumbs-up-fill" style="display: none;"></i>
+                            {% endif %}
+                        </button> 
+                        <span id="like-count-{{ post.id }}">{{ post.post_likes.count }}</span>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+  
+  
+    <div class="pagination justify-content-center">
+        <span class="page-item">
+            {% if page_obj.has_previous %}
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current-page">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

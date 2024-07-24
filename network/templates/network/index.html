@@ -1,0 +1,96 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}    
+    {% block script %}
+    <script src="{% static 'network/main.js' %}"></script>
+    {% endblock %}
+    <div class="new-post-flex">
+        <div class="new-post">
+            <h3>New Post</h3>
+            {% if user.is_authenticated %}
+            <form class="new-post-form" action="{% url 'new_post' %}" method="post">
+                {% csrf_token %}            
+                <div>
+                    <textarea id="post-content" name="post" placeholder="Write your message here..."></textarea>
+                </div>
+                <div>
+                    <button class="btn btn-primary new-post-btn" type="submit">New Post</button>
+                </div>
+            </form>            
+            {% else %}
+            <p class="alert alert-danger" role="alert">Please sign in to write a post</p>
+            {% endif %}
+        </div>        
+    </div>
+    
+
+    <div class="posts-flex">
+        <div class="recent-posts">
+            {% for post in page_obj %}
+            <div class="single-post" id="post-{{ post.id }}">
+                <p class="post-content" id="content-{{ post.id }}">{{ post.post }}</p>
+                <textarea id="edit-content-{{ post.id }}" class="edit-content" style="display:none;"></textarea>
+                <p class="error-message" id="error-{{ post.id }}" style="color: red; display: none;"></p>
+                <p>
+                    <a href="{% url 'profile' post.author.id %}">
+                    <strong>{{ post.author.username }}</strong>
+                    </a>,
+                    {{ post.date|date:"F j, Y, g:i a" }}
+                </p>
+                {% if not post.is_edited %}
+                    <p class="edited" id="edited-{{ post.id }}" style="color: rgb(148, 148, 148); display: none;">
+                        (edited)
+                    </p>
+                {% else %} 
+                    <p class="edited" id="edited-{{ post.id }}" style="color: rgb(148, 148, 148); display: block;">
+                        (edited)
+                    </p>
+                {% endif %}
+
+                <div class="like-edit-flex">
+                    <div>
+                        <p><button class="like-btn" data-post-id="{{ post.id }}" data-user-id="{{ user.id }}">
+                            {% if post.id in user_liked_posts %}
+                                <i class="liked-{{ post.id }} bi bi-hand-thumbs-up-fill" style="display: block;"></i>
+                                <i class="unliked-{{ post.id }} bi bi-hand-thumbs-up" style="display: none;"></i>
+                            {% else %}
+                                <i class="unliked-{{ post.id }} bi bi-hand-thumbs-up" style="display: block;"></i>
+                                <i class="liked-{{ post.id }} bi bi-hand-thumbs-up-fill" style="display: none;"></i>
+                            {% endif %}
+                            </button> 
+                            <span id="like-count-{{ post.id }}">{{ post.post_likes.count }}</span>
+                        </p>
+                    </div>
+                    <div>
+                        {% if post.author == user %}
+                        <button class="edit-button btn btn-light" data-post-id="{{ post.id }}">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="save-button btn btn-light" data-post-id="{{ post.id }}" style="display:none;">
+                            Save
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+    <div class="pagination justify-content-center">
+        <span class="page-item">
+            {% if page_obj.has_previous %}            
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current-page">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>            
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

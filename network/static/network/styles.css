@@ -1,0 +1,92 @@
+.body{
+  height: 100%;
+  padding: 1rem;
+  font-family: "Roboto", sans-serif;
+}
+.new-post-flex{
+  display: flex;
+  justify-content: center;
+}
+.new-post textarea{
+  width: 100%;
+  border-radius: 10px;
+  padding: 0.5rem;
+}
+.new-post{
+  display: inline-block;
+  width: 50vw;
+  background-color: rgb(248, 249, 250);
+  padding: 1rem;
+  border-radius: 30px;
+}
+.posts-flex{
+  display: flex;
+  justify-content: center;
+}
+.recent-posts{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50vw;
+  margin-bottom: 20px;
+
+}
+.single-post{
+  background-color: rgb(186, 220, 254);
+  padding: 0.5rem;
+  margin-top: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.single-post p{
+  margin: 0;
+}
+.page-item{
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+}
+
+.current-page{
+  padding: 8px 12px 8px 12px;
+}
+.profile-flex{
+  display: flex;
+  justify-content: center;
+}
+.profile-details{
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+  background-color: rgb(88, 127, 166);
+  padding: 1rem;
+  border-radius: 30px;
+  color: white;
+}
+.profile-details p{
+  margin: 0;
+}
+.like-btn{
+  border: none;
+  background-color: transparent;
+}
+.edited{
+  font-size: 12px;
+  color: rgb(148, 148, 148);
+}
+.like-edit-flex{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.edit-button{
+  border: none;
+  background-color: transparent;
+  padding: 2px;
+
+    &:hover{
+      color: rgb(0, 123, 255);
+      background-color: transparent;
+    }
+}
